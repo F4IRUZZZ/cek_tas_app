@@ -2,6 +2,7 @@
 .flutter-plugins-dependencies
 .dart_tool/
 .build/
+build/
 .android/
 .ios/
 .macos/

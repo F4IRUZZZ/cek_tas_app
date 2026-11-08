@@ -1,30 +1,28 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cek_tas/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Home menampilkan judul dan tombol kunjungan', (tester) async {
+    await tester.pumpWidget(const CekTasApp());
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Cek Tas'), findsOneWidget);
+    expect(find.textContaining('Hari ini'), findsOneWidget);
+    expect(find.text('Mulai Kunjungan'), findsOneWidget);
+  });
+
+  testWidgets('Buka Kelola Tempat dari Home', (tester) async {
+    await tester.pumpWidget(const CekTasApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await tester.tap(find.byTooltip('Kelola Tempat'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.text('Kelola Tempat'), findsOneWidget);
+    expect(find.text('Tambah Tempat'), findsOneWidget);
   });
 }
