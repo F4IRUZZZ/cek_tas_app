@@ -5,6 +5,7 @@ import '../providers/place_provider.dart';
 import '../widgets/confirm_dialog.dart';
 import '../widgets/place_card.dart';
 import '../widgets/place_icon.dart';
+import 'template_per_tempat.dart';
 
 const _warnaPilihan = [
   '#c0392b',
@@ -63,6 +64,7 @@ class KelolaTempatScreen extends StatelessWidget {
                       .map(
                         (place) => PlaceCard(
                           place: place,
+                          onTap: () => _bukaTemplate(context, place),
                           onToggleFavorite: () =>
                               provider.toggleFavorite(place.id!),
                           onEdit: () => _bukaForm(context, place: place),
@@ -84,6 +86,15 @@ class KelolaTempatScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (_) => FormTempatScreen(place: place),
+      ),
+    );
+  }
+
+  Future<void> _bukaTemplate(BuildContext context, Place place) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TemplateTempatScreen(place: place),
       ),
     );
   }

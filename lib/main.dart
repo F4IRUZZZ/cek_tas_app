@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_router.dart';
+import 'providers/item_provider.dart';
 import 'providers/place_provider.dart';
+import 'providers/visit_provider.dart';
 
 void main() {
   runApp(const CekTasApp());
@@ -12,8 +14,12 @@ class CekTasApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PlaceProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PlaceProvider()),
+        ChangeNotifierProvider(create: (_) => ItemProvider()),
+        ChangeNotifierProvider(create: (_) => VisitProvider()),
+      ],
       child: MaterialApp(
         title: 'Cek Tas',
         debugShowCheckedModeBanner: false,

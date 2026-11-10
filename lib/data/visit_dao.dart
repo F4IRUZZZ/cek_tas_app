@@ -29,6 +29,18 @@ class VisitDao {
     return Visit.fromMap(maps.first);
   }
 
+  Future<Visit?> getActiveVisit() async {
+    final db = await _dbHelper.db;
+    final maps = await db.query(
+      'visits',
+      where: 'status_selesai = 0',
+      orderBy: 'waktu_masuk DESC',
+      limit: 1,
+    );
+    if (maps.isEmpty) return null;
+    return Visit.fromMap(maps.first);
+  }
+
   Future<List<VisitItem>> getVisitItems(String visitId) async {
     final db = await _dbHelper.db;
     final maps = await db.query(
