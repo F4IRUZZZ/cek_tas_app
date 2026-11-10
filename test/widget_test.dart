@@ -63,4 +63,27 @@ void main() {
     expect(find.text('Riwayat'), findsOneWidget);
     expect(find.byIcon(Icons.arrow_back), findsOneWidget);
   });
+
+  testWidgets('Form tempat baru menolak nama kosong', (tester) async {
+    await tester.pumpWidget(const CekTasApp());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await tester.tap(find.byTooltip('Kelola Tempat'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await tester.tap(find.text('Tambah Tempat'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.text('Tempat Baru'), findsOneWidget);
+
+    await tester.tap(find.text('Simpan Tempat'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('Nama tempat wajib diisi.'), findsOneWidget);
+    expect(find.text('Tempat Baru'), findsOneWidget);
+  });
 }

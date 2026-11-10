@@ -27,14 +27,26 @@ class PlaceProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addPlace(Place place) async {
-    await _dao.insertPlace(place);
-    await loadPlaces();
+  Future<bool> addPlace(Place place) async {
+    try {
+      await _dao.insertPlace(place);
+      await loadPlaces();
+      return true;
+    } catch (_) {
+      await loadPlaces();
+      return false;
+    }
   }
 
-  Future<void> updatePlace(Place place) async {
-    await _dao.updatePlace(place);
-    await loadPlaces();
+  Future<bool> updatePlace(Place place) async {
+    try {
+      await _dao.updatePlace(place);
+      await loadPlaces();
+      return true;
+    } catch (_) {
+      await loadPlaces();
+      return false;
+    }
   }
 
   Future<void> deletePlace(String id) async {

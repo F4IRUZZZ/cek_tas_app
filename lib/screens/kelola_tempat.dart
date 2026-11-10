@@ -127,6 +127,7 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
   late String _ikon;
   late String _warna;
   late bool _favorit;
+  bool _menyimpan = false;
 
   bool get _isEdit => widget.place != null;
 
@@ -262,7 +263,7 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
           ),
           const SizedBox(height: 24),
           FilledButton(
-            onPressed: _simpan,
+            onPressed: _menyimpan ? null : _simpan,
             style: FilledButton.styleFrom(
               backgroundColor: const Color(0xFF2b2b2b),
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -270,9 +271,9 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text(
-              'Simpan Tempat',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            child: Text(
+              _menyimpan ? 'Menyimpan...' : 'Simpan Tempat',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -281,6 +282,8 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
   }
 
   Future<void> _simpan() async {
+    if (_menyimpan) return;
+
     final nama = _namaCtrl.text.trim();
     if (nama.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -289,10 +292,12 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
       return;
     }
 
+    setState(() => _menyimpan = true);
     final provider = context.read<PlaceProvider>();
 
+    final bool berhasil;
     if (_isEdit) {
-      await provider.updatePlace(
+      berhasil = await provider.updatePlace(
         widget.place!.copyWith(
           nama: nama,
           ikon: _ikon,
@@ -301,9 +306,9 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
         ),
       );
     } else {
-      await provider.addPlace(
+      berhasil = await provider.addPlace(
         Place(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
           nama: nama,
           ikon: _ikon,
           warna: _warna,
@@ -312,6 +317,24 @@ class _FormTempatScreenState extends State<FormTempatScreen> {
       );
     }
 
-    if (mounted) Navigator.pop(context);
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          berhasil
+              ? (_isEdit
+                  ? 'Perubahan tempat disimpan.'
+                  : 'Tempat baru ditambahkan.')
+              : 'Gagal menyimpan tempat. Coba lagi.',
+        ),
+      ),
+    );
+
+    if (berhasil) {
+      Navigator.pop(context);
+    } else {
+      setState(() => _menyimpan = false);
+    }
   }
 }
