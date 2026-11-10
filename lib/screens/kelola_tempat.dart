@@ -18,15 +18,15 @@ const _warnaPilihan = [
 ];
 
 const _ikonPilihan = [
-  'laptop',
-  'charger',
-  'buku',
-  'tumbler',
-  'dompet',
-  'hp',
-  'earphone',
-  'game',
-  'kamera',
+  'sekolah',
+  'cafe',
+  'mall',
+  'rumah',
+  'kantor',
+  'les',
+  'kampus',
+  'gym',
+  'lainnya',
 ];
 
 class KelolaTempatScreen extends StatelessWidget {
